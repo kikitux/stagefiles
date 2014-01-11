@@ -1,0 +1,5 @@
+connect target /
+#catalog rman/rman@rman
+run{
+backup as compressed backupset archivelog all delete input tag="archivelog" not backed up 1 times;
+}
