@@ -1,3 +1,8 @@
+if [ $# -lt 2 ];then
+  echo "this command requires 2 arguments, source destination"
+  exit 1
+fi
+
 CONTAINER1="$1"
 CONTAINER2="$2"
 
@@ -11,6 +16,11 @@ fi
 
 echo "if on btrfs, we will do a snapshot of /u01/base"
 echo "if fails, will use rsync"
+
+if [ -d /u01/$CONTAINER2 ]; then
+  echo "destination /u01/$CONTAINER2 already exits, exiting.."
+  exit 1
+fi
 
 btrfs su snapshot /u01/$CONTAINER1 /u01/$CONTAINER2 && echo OK || rsync -PavzHl /u01/$CONTAINER1 /u01/$CONTAINER2
 
