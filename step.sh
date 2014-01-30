@@ -13,4 +13,4 @@ echo " "
 #end colors
 tput sgr0
 
-$@ 2> $THISFILE.err >> $THISFILE.log
+$@ 2> ${THISDIR}/${THISFILE%.sh}.err >> ${THISDIR}/${THISFILE%.sh}.log

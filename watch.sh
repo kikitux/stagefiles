@@ -5,7 +5,7 @@ echo " "
 df -Ph / /u01 /u02 /u03 2>/dev/null
 echo " "
 btrfs subvolume show / 2>/dev/null | grep -A6 Snapshot | xargs echo / 
-for x in $(lxc-ls) ; do
+[ -f /usr/bin/lxc-ls ] && for x in $(lxc-ls) ; do
   SNAP=$( btrfs subvolume show /container/$x/rootfs 2>/dev/null| grep -A6 Snapshot)
   SNAPCOUNT=$(echo $SNAP | wc -w)
  [ $SNAPCOUNT -gt 1 ] && echo $SNAP | grep -v yum_ | xargs echo /container/$x/rootfs
