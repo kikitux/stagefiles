@@ -1,7 +1,7 @@
 for x in $@; do
 
   CONTAINER="$x"
-  lxc-create --name $CONTAINER -B btrfs --template oracle -- --url http://192.168.1.11/stage -R 6.latest -r "perl sudo unzip oracle-rdbms-server-12cR1-preinstall"
+  lxc-create --name $CONTAINER -B btrfs --template oracle -- --url http://192.168.1.2/stage -R 6.latest -r "perl sudo unzip oracle-rdbms-server-12cR1-preinstall"
 
   btrfs subvolume list /u01 >/dev/null
   if [ $? -eq 0 ]; then
