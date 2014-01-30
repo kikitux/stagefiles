@@ -81,43 +81,6 @@ chown -R    grid:oinstall       /home/grid
 chmod       ug+rw               /u01
 chmod -R    ug+rw               /u01/app
 
-#unzip the files
-      
-if [ -d /media/sf_stagefiles ]; then
-  if [ -f /u01/stage/grid/runInstaller -a -f /u01/stage/database/runInstaller ]; then
-    echo "found grid/runInstaller and database/runInstaller"
-  else
-    for x in /media/sf_stagefiles/linuxamd64*.zip; do
-      echo "unzipping $x"
-      unzip -o $x >> /dev/null
-    done
-  fi
-    cp /media/sf_stagefiles/*.sh /u01/stage
-    cp /media/sf_stagefiles/*.sql /u01/stage
-    cp /media/sf_stagefiles/ocm.rsp /u01/stage
-    cp /media/sf_stagefiles/p6880880_121010_Linux-x86-64.zip /u01/stage
-    cp /media/sf_stagefiles/p17272829_121010_Linux-x86-64.zip /u01/stage
-    cp -ar /media/sf_stagefiles/bin_oracle /u01/stage
-elif [ -f /u01/stage/linuxamd64_12c_grid_1of2.zip ]; then
-  if [ -f /u01/stage/grid/runInstaller -a -f /u01/stage/database/runInstaller ]; then
-    echo "found grid/runInstaller and database/runInstaller"
-  else
-    for x in /u01/stage/linuxamd64*.zip; do
-      echo "unzipping $x"
-      unzip -o $x >> /dev/null
-      rm $x
-    done
-  fi
-else
-  echo "nothing to unzip"
-fi
-
-chown grid:oinstall /u01/stage 2>&1 >/dev/null
-if [ $? -eq 0 ];then
-  chown -R grid:oinstall /u01/stage 2>/dev/null
-  chmod -R ug+rw /u01/stage 2>/dev/null
-fi
-
 sed -i -e 's/Defaults\s*requiretty$/#Defaults\trequiretty/' /etc/sudoers
 
 #hostname need to be on /etc/hosts

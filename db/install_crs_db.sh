@@ -49,6 +49,17 @@ $ORACLE_HOME/perl/bin/perl -I$ORACLE_HOME/perl/lib -I$ORACLE_HOME/crs/install $O
 
 }
 
+root_rac_grid_12101(){
+
+ORACLE_BASE=/u01/app/grid
+ORACLE_HOME=/u01/app/12.1.0.1/grid
+GI_HOME=/u01/app/12.1.0.1/grid
+
+$ORACLE_HOME/root.sh
+#$ORACLE_HOME/perl/bin/perl -I$ORACLE_HOME/perl/lib -I$ORACLE_HOME/crs/install $ORACLE_HOME/crs/install/roothas.pl
+
+}
+
 opatch_grid_12101(){
 
 #OPATCH
@@ -158,6 +169,9 @@ elif [ $OPS == "root" ];then
   configure_listener_12101
   root_db_12101
   opatch_db_12101
+elif [ $OPS == "rac" ];then
+  install_grid_12101
+  opatch_grid_12101
 else
   install_grid_12101
   opatch_grid_12101
