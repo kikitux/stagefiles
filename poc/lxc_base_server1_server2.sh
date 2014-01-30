@@ -6,8 +6,8 @@ sh /media/sf_stagefiles/step.sh sh /media/sf_stagefiles/lxc/install_lxc.sh
 sh /media/sf_stagefiles/step.sh sh /media/sf_stagefiles/lxc/create_container.sh base
 sh /media/sf_stagefiles/step.sh lxc-start --name base -d
 sh /media/sf_stagefiles/step.sh sleep 15
-lxc-attach --name base sh /media/sf_stagefiles/step.sh sh /media/sf_stagefiles/db/unzip.sh
 lxc-attach --name base sh /media/sf_stagefiles/step.sh sh /media/sf_stagefiles/db/preinstall_crs_db.sh
+lxc-attach --name base sh /media/sf_stagefiles/step.sh sh /media/sf_stagefiles/db/unzip.sh
 lxc-attach --name base sh /media/sf_stagefiles/step.sh sh /media/sf_stagefiles/db/install_crs_db.sh noroot
 sh /media/sf_stagefiles/step.sh lxc-stop --name base
 sh /media/sf_stagefiles/step.sh sh /media/sf_stagefiles/lxc/clone_container.sh base server1

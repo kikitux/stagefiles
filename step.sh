@@ -14,4 +14,4 @@ echo " "
 tput sgr0
 echo " "
 
-$@ 2> ${THISDIR}/${THISFILE%.sh}.err >> ${THISDIR}/${THISFILE%.sh}.log
+$@ 2>${THISDIR}/${THISFILE%.sh}.err >> ${THISDIR}/${THISFILE%.sh}.log
