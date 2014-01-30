@@ -1,10 +1,6 @@
 #!/bin/bash
 #take care of some prerequirements
 
-#setup local yum repo
-#[ -f /etc/yum.repos.d/public-yum-ol6.repo ] && mv /etc/yum.repos.d/public-yum-ol6.repo{,.ori}
-#curl -o /etc/yum.repos.d/vbox.repo http://192.168.56.1/stage/vbox-yum-ol6.repo
-
 #install preinstall rpm for oracle 12c db
 
 echo "installing oracle-rdbms-server-12cR1-preinstall"
