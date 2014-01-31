@@ -1,5 +1,6 @@
 THISFILE=$(basename "${0}")
 THISDIR=${0%$THISFILE}
+THISDIR=${0%lxc}
 
 CONTAINER1=$1
 CONTAINER2=$2

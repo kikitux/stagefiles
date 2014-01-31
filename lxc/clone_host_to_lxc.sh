@@ -1,6 +1,7 @@
 #!/bin/bash
 THISFILE=$(basename "${0}")
 THISDIR=${0%$THISFILE}
+THISDIR=${0%lxc}
 
 if [ -d /pre_lxc ]; then
   for x in $@; do
