@@ -40,6 +40,6 @@ cat >> /container/$CONTAINER2/config << EOF
 lxc.mount.entry=/u03/$CONTAINER2 /container/$CONTAINER2/rootfs/u03 none rw,bind 0 0
 lxc.mount.entry=/u02/$CONTAINER2 /container/$CONTAINER2/rootfs/u02 none rw,bind 0 0
 lxc.mount.entry=/u01/$CONTAINER2 /container/$CONTAINER2/rootfs/u01 none rw,bind 0 0
-lxc.mount.entry=$THISDIR /container/$CONTAINER2/rootfs$THISDIR none rw,bind 0 0
+lxc.mount.entry=$BASEDIR /container/$CONTAINER2/rootfs$BASEDIR none rw,bind 0 0
 EOF
 

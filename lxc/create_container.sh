@@ -1,6 +1,8 @@
 #!/bin/bash
+
 THISFILE=$(basename "${0}")
 THISDIR=${0%$THISFILE}
+BASEDIR=${0%lxc/$THISFILE}
 BASEDIR=${0%lxc/$THISFILE}
 
 
