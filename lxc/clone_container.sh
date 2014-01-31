@@ -1,6 +1,5 @@
 THISFILE=$(basename "${0}")
-THISDIR=${0%$THISFILE}
-THISDIR=${0%lxc}
+THISDIR=${0%lxc/$THISFILE}
 
 if [ $# -lt 2 ];then
   echo "this command requires 2 arguments, source destination"

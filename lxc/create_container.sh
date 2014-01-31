@@ -1,7 +1,6 @@
 #!/bin/bash
 THISFILE=$(basename "${0}")
-THISDIR=${0%$THISFILE}
-THISDIR=${0%lxc}
+THISDIR=${0%lxc/$THISFILE}
 
 . $THISDIR/../os/repo.env
 
