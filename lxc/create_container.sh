@@ -2,7 +2,7 @@
 THISFILE=$(basename "${0}")
 THISDIR=${0%lxc/$THISFILE}
 
-. $THISDIR/../os/repo.env
+. $THISDIR/os/repo.env
 
 for x in $@; do
 
