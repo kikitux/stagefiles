@@ -1,5 +1,6 @@
 THISFILE=$(basename "${0}")
-THISDIR=${0%lxc/$THISFILE}
+THISDIR=${0%$THISFILE}
+BASEDIR=${0%lxc/$THISFILE}
 
 if [ $# -lt 2 ];then
   echo "this command requires 2 arguments, source destination"
@@ -31,7 +32,7 @@ mkdir -p /u02/$CONTAINER2 /u03/$CONTAINER2
 mkdir -p /container/$CONTAINER2/rootfs/u01 
 mkdir -p /container/$CONTAINER2/rootfs/u02 
 mkdir -p /container/$CONTAINER2/rootfs/u03
-mkdir -p /container/$CONTAINER2/rootfs/$THISDIR
+mkdir -p /container/$CONTAINER2/rootfs/$BASEDIR
 
 mv /container/$CONTAINER2/config /container/$CONTAINER2/config.ori
 grep -v 'lxc.mount.entry' /container/$CONTAINER2/config.ori > /container/$CONTAINER2/config

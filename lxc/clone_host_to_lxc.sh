@@ -1,6 +1,7 @@
 #!/bin/bash
 THISFILE=$(basename "${0}")
-THISDIR=${0%lxc/$THISFILE}
+THISDIR=${0%$THISFILE}
+BASEDIR=${0%lxc/$THISFILE}
 
 if [ -d /pre_lxc ]; then
   for x in $@; do
@@ -13,7 +14,7 @@ if [ -d /pre_lxc ]; then
   cat >> /container/$CONTAINER/config << EOF
 lxc.mount.entry=/u02/$CONTAINER /container/$CONTAINER/rootfs/u02 none rw,bind 0 0
 lxc.mount.entry=/u03/$CONTAINER /container/$CONTAINER/rootfs/u03 none rw,bind 0 0
-lxc.mount.entry=$THISDIR /container/$CONTAINER/rootfs$THISDIR none rw,bind 0 0
+lxc.mount.entry=$BASEDIR /container/$CONTAINER/rootfs$BASEDIR none rw,bind 0 0
 EOF
 
 done
