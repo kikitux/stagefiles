@@ -1,6 +1,5 @@
 THISFILE=$(basename "${0}")
-THISDIR=${0%$THISFILE}
-THISDIR=${0%poc}
+THISDIR=${0%poc/$THISFILE}
 
 sh $THISDIR/step.sh sh $THISDIR/os/set_repo.sh
 sh $THISDIR/step.sh sh $THISDIR/os/sdb_u01_btrfs.sh
