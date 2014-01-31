@@ -1,3 +1,6 @@
+THISFILE=$(basename "${0}")
+THISDIR=${0%$THISFILE}
+
 CONTAINER1=$1
 CONTAINER2=$2
 
@@ -9,7 +12,7 @@ fi
 
 lxc-attach --name $CONTAINER1 id 2>&1 > /dev/null
 if [ $? -eq 0 ]; then
-  lxc-attach --name $CONTAINER1 sh /media/sf_stagefiles/step.sh sh /media/sf_stagefiles/db/clone_db_to_disk.sh
+  lxc-attach --name $CONTAINER1 sh $THISDIR/step.sh sh $THISDIR/db/clone_db_to_disk.sh
   if [ $? -eq 0 ]; then
     #mv /u03/$CONTAINER1/dbcopy/ /u03/$CONTAINER2/dbcopy/
     cd /u03/$CONTAINER1/dbcopy/
