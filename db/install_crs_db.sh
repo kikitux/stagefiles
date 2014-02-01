@@ -9,7 +9,7 @@ else
         local l_path=/u01/stage
         for patch in $@; do
                 if [ -d $l_path/$patch ]; then
-                        echo "Warning: Directory $l_path/$patch found, skipping"
+                        echo "Directory $l_path/$patch found, skipping"
                         echo "If you want to unzip this patch again, please remove the $l_path/$patch directory"
                 else
                                 sudo -H -E -u grid mkdir -p $l_path/$patch
@@ -29,13 +29,21 @@ else
         exit 1
 fi
 
+ORACLE_BASE=/u01/app/grid
+ORACLE_HOME=/u01/app/12.1.0.1/grid
+GI_HOME=/u01/app/12.1.0.1/grid
+
 echo "oraInventory in /u01/app/oraInventory"
-echo "Oracle Base for grid is /u01/app/grid"
-echo "Oracle Home for grid is /u01/app/12.1.0.1/grid"
+echo "Oracle Base for grid is $ORACLE_BASE "
+echo "Oracle Home for grid is $ORACLE_HOME "
 
-sudo -H -E -u grid /u01/stage/grid/runInstaller -silent -ignoreSysPrereqs -ignorePrereq -force -waitforcompletion ORACLE_HOSTNAME=$HOSTNAME INVENTORY_LOCATION=/u01/app/oraInventory SELECTED_LANGUAGES=en oracle.install.option=CRS_SWONLY ORACLE_BASE=/u01/app/grid ORACLE_HOME=/u01/app/12.1.0.1/grid oracle.install.asm.OSDBA=asmdba oracle.install.asm.OSOPER=asmoper oracle.install.asm.OSASM=asmadmin
+if [ -d $ORACLE_HOME/bin ]; then
+  echo "$ORACLE_HOME/bin found, skipping installation of grid"
+else
+  sudo -H -E -u grid /u01/stage/grid/runInstaller -silent -ignoreSysPrereqs -ignorePrereq -force -waitforcompletion ORACLE_HOSTNAME=$HOSTNAME INVENTORY_LOCATION=/u01/app/oraInventory SELECTED_LANGUAGES=en oracle.install.option=CRS_SWONLY ORACLE_BASE=$ORACLE_BASE ORACLE_HOME=$ORACLE_HOME oracle.install.asm.OSDBA=asmdba oracle.install.asm.OSOPER=asmoper oracle.install.asm.OSASM=asmadmin
 
-/u01/app/oraInventory/orainstRoot.sh
+  /u01/app/oraInventory/orainstRoot.sh
+fi
 }
 
 root_grid_12101(){
@@ -56,7 +64,10 @@ ORACLE_HOME=/u01/app/12.1.0.1/grid
 GI_HOME=/u01/app/12.1.0.1/grid
 
 $ORACLE_HOME/root.sh
-#$ORACLE_HOME/perl/bin/perl -I$ORACLE_HOME/perl/lib -I$ORACLE_HOME/crs/install $ORACLE_HOME/crs/install/roothas.pl
+
+cd $ORACLE_HOME
+echo "attaching grid home to the inventory.."
+sudo -H -E -u grid $ORACLE_HOME/oui/bin/attachHome.sh
 
 }
 
@@ -69,7 +80,6 @@ if [ -f /u01/stage/p6880880_121010_Linux-x86-64.zip ]; then
 fi
 
 #PATCH
-#future patches
 unzip_patch 17272829
 
 ORACLE_BASE=/u01/app/grid
@@ -148,6 +158,12 @@ $ORACLE_HOME/OPatch/opatchauto apply /u01/stage/17272829/17272829 -oh $ORACLE_HO
 
 }
 
+delete_stagedb_12101(){
+if [ -d /u01/stage/database ]; then
+  rm -fr /u01/stage/database
+fi
+}
+
 #if we are inside an LXC container, then we need to fix mtab
 if [ -c /dev/lxc/console ]; then
   cp /etc/mtab /etc/mtab.ori
@@ -171,7 +187,12 @@ elif [ $OPS == "root" ];then
   opatch_db_12101
 elif [ $OPS == "rac" ];then
   install_grid_12101
-  opatch_grid_12101
+  root_rac_grid_12101
+  #delete_stagegrid_12101
+  #in rac, we require the patches in same location on all nodes
+  #unzip now, to ensure PSU/CPU is on both nodes
+  #even when OPatch will be called from node1 later
+  unzip_patch 17272829
 else
   install_grid_12101
   opatch_grid_12101
@@ -181,6 +202,7 @@ else
   install_db_12101
   root_db_12101
   opatch_db_12101
+  #delete_stagedb_12101
 fi
 
 #set mtab as before
