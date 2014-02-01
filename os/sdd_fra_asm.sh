@@ -7,8 +7,8 @@ BASEDIR=${0%os/$THISFILE}
 id grid 2>/dev/null
 if [ $? -ne 0 ]; then
   echo "user grid is required"
-  echo "executing $BASEDIR/db/preinstall_crs_db.sh"
-  sh  "$BASEDIR/db/preinstall_crs_db.sh"
+  echo "executing $BASEDIR/os/grid_oracle_users.sh"
+  sh  "$BASEDIR/os/grid_oracle_users.sh"
 fi
 
 #install required packages

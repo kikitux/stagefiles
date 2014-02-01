@@ -7,21 +7,25 @@ BASEDIR=${0%os/$THISFILE}
 id grid 2>/dev/null
 if [ $? -ne 0 ]; then
   echo "user grid is required"
-  echo "executing $BASEDIR/db/preinstall_crs_db.sh"
-  sh  "$BASEDIR/db/preinstall_crs_db.sh"
+  echo "executing $BASEDIR/os/grid_oracle_users.sh"
+  sh  "$BASEDIR/os/grid_oracle_users.sh"
 fi
 
 #install required packages
 yum install -y oracleasm-support.x86_64 parted.x86_64
 
 #configure oracleasm
-service oracleasm configure << EOF
-grid
-asmadmin
-y
-y
+if [ -d /dev/oracleasm/disks ]; then
+  echo "oracleasm configured"
+else
+  service oracleasm configure << EOF
+  grid
+  asmadmin
+  y
+  y
 EOF
 
+fi
 
 blkid /dev/sdc*
 if [ $? -ne 0 ]; then
