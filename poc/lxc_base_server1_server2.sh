@@ -11,6 +11,7 @@ sh $BASEDIR/step.sh sh $BASEDIR/lxc/install_lxc.sh
 sh $BASEDIR/step.sh sh $BASEDIR/lxc/create_container.sh base
 sh $BASEDIR/step.sh lxc-start --name base -d
 sh $BASEDIR/step.sh sleep 15
+lxc-attach --name base sh $BASEDIR/step.sh sh $BASEDIR/os/grid_oracle_user.sh
 lxc-attach --name base sh $BASEDIR/step.sh sh $BASEDIR/db/preinstall_crs_db.sh
 lxc-attach --name base sh $BASEDIR/step.sh sh $BASEDIR/db/unzip.sh
 lxc-attach --name base sh $BASEDIR/step.sh sh $BASEDIR/db/install_crs_db.sh noroot

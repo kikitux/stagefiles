@@ -15,9 +15,9 @@ grep ^kmdba:     /etc/group || groupadd -g 54326 kmdba
 
 #create or modify as required user grid and oracle
 echo "verifying grid user"
-id grid   > /dev/null  && usermod -a -g oinstall -G asmdba,asmadmin,asmoper,dba grid                 || useradd -u 54320 -g oinstall -G asmdba,asmadmin,asmoper,dba grid
+id grid   2>&1  > /dev/null  && usermod -a -g oinstall -G asmdba,asmadmin,asmoper,dba grid                 || useradd -u 54320 -g oinstall -G asmdba,asmadmin,asmoper,dba grid
 echo "verifying oracle user"
-id oracle > /dev/null  && usermod -a -g oinstall -G dba,asmdba,backupdba,oper,dgdba,kmdba oracle || useradd -u 54321 -g oinstall -G dba,asmdba,backupdba,oper,dgdba,kmdba oracle
+id oracle 2>&1 > /dev/null  && usermod -a -g oinstall -G dba,asmdba,backupdba,oper,dgdba,kmdba oracle || useradd -u 54321 -g oinstall -G dba,asmdba,backupdba,oper,dgdba,kmdba oracle
 
 #set initial password
 echo oracle | passwd --stdin oracle
