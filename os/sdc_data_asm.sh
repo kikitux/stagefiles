@@ -1,3 +1,16 @@
+#!/bin/bash
+
+THISFILE=$(basename "${0}")
+THISDIR=${0%$THISFILE}
+BASEDIR=${0%os/$THISFILE}
+
+id grid 2>/dev/null
+if [ $? -ne 0 ]; then
+  echo "user grid is required"
+  echo "executing $BASEDIR/db/preinstall_crs_db.sh"
+  sh  "$BASEDIR/db/preinstall_crs_db.sh"
+fi
+
 #install required packages
 yum install -y oracleasm-support.x86_64 parted.x86_64
 
