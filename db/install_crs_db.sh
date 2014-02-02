@@ -141,16 +141,19 @@ else
   /u01/app/oracle/product/12.1.0.1/dbhome_1/root.sh
   ssh node2 /u01/app/oracle/product/12.1.0.1/dbhome_1/root.sh
  
-  sudo -H -E -u oracle unzip -o /u01/stage/p6880880_121010_Linux-x86-64.zip -x PatchSearch.xml -d /u01/app/12.1.0.1/grid
+  sudo -H -E -u oracle unzip -o /u01/stage/p6880880_121010_Linux-x86-64.zip -x PatchSearch.xml -d $ORACLE_HOME
   ssh node2 mkdir -p /u01/stage
   scp /u01/stage/p6880880_121010_Linux-x86-64.zip node2:/u01/stage
-  sudo -H -E -u oracle ssh node2 unzip -o /u01/stage/p6880880_121010_Linux-x86-64.zip -x PatchSearch.xml -d /u01/app/12.1.0.1/grid
+  sudo -H -E -u oracle ssh node2 unzip -o /u01/stage/p6880880_121010_Linux-x86-64.zip -x PatchSearch.xml -d $ORACLE_HOME
 
   sudo -H -E -u oracle /u01/app/oracle/product/12.1.0.1/dbhome_1/OPatch/opatch apply /u01/stage/17735306/17735306/17552800 -silent -ocmrf /u01/stage/ocm.rsp
 
   sudo -H -E -u oracle mkdir -p /home/oracle/bin     
   sudo -H -E -u oracle ssh node2 mkdir -p /home/oracle/bin     
 
+  echo "============"
+  echo "============"
+  echo "all task finished"
   echo "well done, oracle grid and database installed"
   echo "system ready to create a database"
 
