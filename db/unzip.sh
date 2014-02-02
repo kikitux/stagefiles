@@ -37,7 +37,7 @@ if [ -d $THISDIR/zip ]; then
   \cp $THISDIR/*{.sh,.sql,.rsp,.expect} /u01/stage
   \cp -ar $THISDIR/../bin_oracle /u01/stage
   [ -f /u01/stage/p6880880_121010_Linux-x86-64.zip ] || \cp $THISDIR/zip/p6880880_121010_Linux-x86-64.zip /u01/stage
-  [ -f /u01/stage/p17272829_121010_Linux-x86-64.zip ] || \cp $THISDIR/zip/p17272829_121010_Linux-x86-64.zip /u01/stage
+  [ -f /u01/stage/p17735306_121010_Linux-x86-64.zip ] || \cp $THISDIR/zip/p17735306_121010_Linux-x86-64.zip /u01/stage
   chown -R grid: /u01/stage/
   chmod -R ug+r /u01/stage/
 else
