@@ -10,8 +10,11 @@ else
   PACKAGES="oracle-rdbms-server-12cR1-preinstall perl yum-plugin-fs-snapshot ocfs2-tools reflink btrfs-progs parted oracleasm-support unzip sudo"
 fi
 
-yum clean all
-yum -y install $PACKAGES 
+rpm -q $PACKAGES
+if [ $? -ne 0 ]; then
+  yum clean all
+  yum -y install $PACKAGES 
+fi
 
 #stop sendmail service if we are in a container
 if [ -c /dev/lxc/console ]; then
@@ -63,6 +66,21 @@ chmod       ug+rw               /u01
 chmod -R    ug+rw               /u01/app
 
 sed -i -e 's/Defaults\s*requiretty$/#Defaults\trequiretty/' /etc/sudoers
+
+ARG=$1
+if [ $ARG == "rac" ] ;then
+  rpm -q expect 2>&1 >> /dev/null || yum install -y expect
+  [ -f /media/stagefiles/os/99-oracle-asmdevices.rules ] && \cp /media/stagefiles/os/99-oracle-asmdevices.rules /etc/udev/rules.d/
+  start_udev
+  [ -f /media/stagefiles/db/zip/linuxamd64_12c_grid_1of2.zip ] && unzip -o /media/stagefiles/db/zip/linuxamd64_12c_grid_1of2.zip -d /u01/stage grid/rpm/cvuqdisk-1.0.9-1.rpm
+  [ -f /media/stagefiles/db/zip/linuxamd64_12c_grid_1of2.zip ] && unzip -o /media/stagefiles/db/zip/linuxamd64_12c_grid_1of2.zip -d /u01/stage grid/sshsetup/sshUserSetup.sh
+  yum install -y /u01/stage/grid/rpm/cvuqdisk-1.0.9-1.rpm
+  RP_ETH2="net.ipv4.conf.eth2.rp_filter=2"
+  RP_ETH3="net.ipv4.conf.eth3.rp_filter=2"
+  grep $RP_ETH2 /etc/sysctl.conf 2>/dev/null || echo $RP_ETH2 >> /etc/sysctl.conf
+  grep $RP_ETH3 /etc/sysctl.conf 2>/dev/null || echo $RP_ETH3 >> /etc/sysctl.conf
+  sysctl -p
+fi
 
 #hostname need to be on /etc/hosts
 

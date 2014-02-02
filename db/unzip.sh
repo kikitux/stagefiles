@@ -34,7 +34,7 @@ if [ -d $THISDIR/zip ]; then
       unzip -o $x >> /dev/null
     done
   fi
-  \cp $THISDIR/*{.sh,.sql,.rsp} /u01/stage
+  \cp $THISDIR/*{.sh,.sql,.rsp,.expect} /u01/stage
   \cp -ar $THISDIR/../bin_oracle /u01/stage
   [ -f /u01/stage/p6880880_121010_Linux-x86-64.zip ] || \cp $THISDIR/zip/p6880880_121010_Linux-x86-64.zip /u01/stage
   [ -f /u01/stage/p17272829_121010_Linux-x86-64.zip ] || \cp $THISDIR/zip/p17272829_121010_Linux-x86-64.zip /u01/stage

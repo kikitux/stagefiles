@@ -1,0 +1,4 @@
+KERNEL=="oracleasm/disks/DATA", OWNER="grid", GROUP="asmadmin", MODE="0660"
+KERNEL=="oracleasm/disks/FRA", OWNER="grid", GROUP="asmadmin", MODE="0660"
+KERNEL=="sdc1", OWNER="grid", GROUP="asmadmin", MODE="0660"
+KERNEL=="sdd1", OWNER="grid", GROUP="asmadmin", MODE="0660"

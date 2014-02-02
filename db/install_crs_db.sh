@@ -57,17 +57,54 @@ $ORACLE_HOME/perl/bin/perl -I$ORACLE_HOME/perl/lib -I$ORACLE_HOME/crs/install $O
 
 }
 
-root_rac_grid_12101(){
+install_rac_grid_12101(){
+if [ -f /u01/stage/grid/runInstaller ] ; then
+        echo "stage grid found .."
+else
+        echo " Error: /u01/stage/grid not found"
+        echo " ensure all the files have been unzipped at /u01/stage level"
+        exit 1
+fi
 
 ORACLE_BASE=/u01/app/grid
 ORACLE_HOME=/u01/app/12.1.0.1/grid
 GI_HOME=/u01/app/12.1.0.1/grid
 
-$ORACLE_HOME/root.sh
+echo "oraInventory in /u01/app/oraInventory"
+echo "Oracle Base for grid is $ORACLE_BASE "
+echo "Oracle Home for grid is $ORACLE_HOME "
 
-cd $ORACLE_HOME
-echo "attaching grid home to the inventory.."
-sudo -H -E -u grid $ORACLE_HOME/oui/bin/attachHome.sh
+if [ -d $ORACLE_HOME/bin ]; then
+  echo "$ORACLE_HOME/bin found, skipping installation of grid"
+else
+  if [ ! -f ~grid/.ssh/id_rsa.pub ] && [ ! -f ~grid/.ssh/authorized_hosts ]; then
+    expect /u01/stage/sshUserSetup.expect root root
+    sudo -H -E -u grid expect /u01/stage/sshUserSetup.expect grid grid
+  fi
+  sudo -H -E -u grid /u01/stage/grid/runInstaller -silent -waitforcompletion -responseFile /u01/stage/rac_grid.rsp
+
+fi
+
+ORACLE_BASE=/u01/app/grid
+ORACLE_HOME=/u01/app/12.1.0.1/grid
+GI_HOME=/u01/app/12.1.0.1/grid
+
+/u01/app/oraInventory/orainstRoot.sh
+ssh node2 /u01/app/oraInventory/orainstRoot.sh
+/u01/app/12.1.0.1/grid/root.sh
+ssh node2 /u01/app/12.1.0.1/grid/root.sh
+
+sudo -H -E -u grid /u01/app/12.1.0.1/grid/cfgtoollogs/configToolAllCommands RESPONSE_FILE=/u01/stage/configtoolallcommands.rsp
+sudo -H -E -u grid /u01/app/12.1.0.1/grid/bin/asmca -silent -createDiskGroup -diskGroupName FRA -disk /dev/oracleasm/disks/FRA -redundancy EXTERNAL -sysAsmPassword Password1
+
+sudo -H -E -u oracle /u01/stage/database/runInstaller -silent -ignorePrereq -force -waitforcompletion ORACLE_HOSTNAME=$HOSTNAME oracle.install.option=INSTALL_DB_SWONLY UNIX_GROUP_NAME=oinstall INVENTORY_LOCATION=/u01/app/oraInventory SELECTED_LANGUAGES=en ORACLE_HOME=/u01/app/oracle/product/12.1.0.1/dbhome_1 ORACLE_BASE=/u01/app/oracle oracle.install.db.InstallEdition=EE oracle.install.db.DBA_GROUP=dba oracle.install.db.BACKUPDBA_GROUP=dba oracle.install.db.DGDBA_GROUP=dba oracle.install.db.KMDBA_GROUP=dba DECLINE_SECURITY_UPDATES=true oracle.install.db.CLUSTER_NODES=node1,node2
+
+sudo -H -E -u grid unzip -o /u01/stage/p6880880_121010_Linux-x86-64.zip -x PatchSearch.xml -d /u01/app/12.1.0.1/grid
+ssh node2 mkdir -p /u01/stage
+scp /u01/stage/p6880880_121010_Linux-x86-64.zip node2:/u01/stage
+sudo -H -E -u grid ssh node2 unzip -o /u01/stage/p6880880_121010_Linux-x86-64.zip -x PatchSearch.xml -d /u01/app/12.1.0.1/grid
+
+unzip_patch 17272829
 
 }
 
@@ -186,13 +223,8 @@ elif [ $OPS == "root" ];then
   root_db_12101
   opatch_db_12101
 elif [ $OPS == "rac" ];then
-  install_grid_12101
-  root_rac_grid_12101
+  install_rac_grid_12101
   #delete_stagegrid_12101
-  #in rac, we require the patches in same location on all nodes
-  #unzip now, to ensure PSU/CPU is on both nodes
-  #even when OPatch will be called from node1 later
-  unzip_patch 17272829
 else
   install_grid_12101
   opatch_grid_12101
@@ -205,5 +237,8 @@ else
   #delete_stagedb_12101
 fi
 
-#set mtab as before
-[ -f /etc/mtab.ori ] && \mv /etc/mtab.ori /etc/mtab
+#if we are inside an LXC container, then we need to fix mtab
+if [ -c /dev/lxc/console ]; then
+  #set mtab as before
+  [ -f /etc/mtab.ori ] && \mv /etc/mtab.ori /etc/mtab
+fi
