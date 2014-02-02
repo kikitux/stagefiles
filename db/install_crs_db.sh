@@ -106,6 +106,29 @@ sudo -H -E -u grid ssh node2 unzip -o /u01/stage/p6880880_121010_Linux-x86-64.zi
 
 unzip_patch 17272829
 
+ORACLE_BASE=/u01/app/oracle
+ORACLE_HOME=/u01/app/oracle/product/12.1.0.1/dbhome_1
+
+if [ -d $ORACLE_HOME/bin ]; then
+  echo "$ORACLE_HOME/bin found, skipping installation of grid"
+else
+  if [ ! -f ~oracle/.ssh/id_rsa.pub ] && [ ! -f ~oracle/.ssh/authorized_hosts ]; then
+    sudo -H -E -u oracle expect /u01/stage/sshUserSetup.expect oracle oracle
+  fi
+  sudo -H -E -u oracle /u01/stage/database/runInstaller -silent -ignorePrereq -force -waitforcompletion ORACLE_HOSTNAME=$HOSTNAME oracle.install.option=INSTALL_DB_SWONLY UNIX_GROUP_NAME=oinstall INVENTORY_LOCATION=/u01/app/oraInventory SELECTED_LANGUAGES=en ORACLE_HOME=/u01/app/oracle/product/12.1.0.1/dbhome_1 ORACLE_BASE=/u01/app/oracle oracle.install.db.InstallEdition=EE oracle.install.db.DBA_GROUP=dba oracle.install.db.BACKUPDBA_GROUP=dba oracle.install.db.DGDBA_GROUP=dba oracle.install.db.KMDBA_GROUP=dba DECLINE_SECURITY_UPDATES=true oracle.install.db.CLUSTER_NODES=node1,node2
+
+  /u01/app/oracle/product/12.1.0.1/dbhome_1/root.sh
+  ssh node2 /u01/app/oracle/product/12.1.0.1/dbhome_1/root.sh
+ 
+  sudo -H -E -u oracle mkdir -p /home/oracle/bin     
+  sudo -H -E -u oracle ssh node2 mkdir -p /home/oracle/bin     
+
+  echo "well done, oracle grid and database installed"
+  echo "system ready to create a database"
+
+fi
+
+
 }
 
 opatch_grid_12101(){
@@ -154,10 +177,6 @@ else
         echo " ensure all the files have been unzipped at /u01/stage level"
         exit 1
 fi
-
-echo "oraInventory in /u01/app/oraInventory"
-echo "Oracle Base for grid is /u01/app/grid"
-echo "Oracle Home for grid is /u01/app/12.1.0.1/grid"
 
 sudo -H -E -u oracle /u01/stage/database/runInstaller -silent -ignorePrereq -force -waitforcompletion ORACLE_HOSTNAME=$HOSTNAME oracle.install.option=INSTALL_DB_SWONLY UNIX_GROUP_NAME=oinstall INVENTORY_LOCATION=/u01/app/oraInventory SELECTED_LANGUAGES=en ORACLE_HOME=/u01/app/oracle/product/12.1.0.1/dbhome_1 ORACLE_BASE=/u01/app/oracle oracle.install.db.InstallEdition=EE oracle.install.db.DBA_GROUP=dba oracle.install.db.BACKUPDBA_GROUP=dba oracle.install.db.DGDBA_GROUP=dba oracle.install.db.KMDBA_GROUP=dba DECLINE_SECURITY_UPDATES=true
 
