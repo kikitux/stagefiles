@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 #take care of some prerequirements
 
 THISFILE=$(basename "${0}")
