@@ -67,8 +67,12 @@ chmod -R    ug+rw               /u01/app
 
 sed -i -e 's/Defaults\s*requiretty$/#Defaults\trequiretty/' /etc/sudoers
 
+<<<<<<< HEAD
 [ $1 ] && ARG=$1 || ARG="empty"
 
+=======
+ARG=$1
+>>>>>>> 0f5b11aec5d49e180d0c7d4915f90f69a40bb791
 if [ $ARG == "rac" ] ;then
   rpm -q expect 2>&1 >> /dev/null || yum install -y expect
   [ -f /media/stagefiles/os/99-oracle-asmdevices.rules ] && \cp /media/stagefiles/os/99-oracle-asmdevices.rules /etc/udev/rules.d/
