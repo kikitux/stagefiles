@@ -1,0 +1,6 @@
+linuxamd64_12c_database_1of2.zip
+linuxamd64_12c_database_2of2.zip
+linuxamd64_12c_grid_1of2.zip
+linuxamd64_12c_grid_2of2.zip
+p6880880_121010_Linux-x86-64.zip
+p17735306_121010_Linux-x86-64.zip

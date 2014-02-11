@@ -3,7 +3,7 @@
 rpm -q ocfs2-tools > /dev/null
 if [ $? -ne 0 ];then
   yum clean all
-  yum -y install ocfs2-tools > /dev/null
+  yum -y install ocfs2-tools 
 fi
 
 blkid /dev/sdd*

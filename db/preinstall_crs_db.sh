@@ -10,8 +10,11 @@ else
   PACKAGES="oracle-rdbms-server-12cR1-preinstall perl yum-plugin-fs-snapshot ocfs2-tools reflink btrfs-progs parted oracleasm-support unzip sudo"
 fi
 
-yum clean all
-yum -y install $PACKAGES 
+rpm -q $PACKAGES
+if [ $? -ne 0 ]; then
+  yum clean all
+  yum -y install $PACKAGES 
+fi
 
 #stop sendmail service if we are in a container
 if [ -c /dev/lxc/console ]; then
@@ -32,25 +35,6 @@ else
       echo 'grid  soft  nproc  2047'>> /etc/security/limits.conf
     fi
 fi
-
-#create the extra groups for db12c role separation
-echo "Checking groups for grid and oracle user"
-
-grep ^asmdba:    /etc/group || groupadd -g 54318 asmdba
-grep ^asmoper:   /etc/group || groupadd -g 54319 asmoper
-grep ^asmadmin:  /etc/group || groupadd -g 54320 asmadmin
-grep ^oinstall:  /etc/group || groupadd -g 54321 oinstall
-grep ^dba:       /etc/group || groupadd -g 54322 dba
-grep ^backupdba: /etc/group || groupadd -g 54323 backupdba
-grep ^oper:      /etc/group || groupadd -g 54324 oper
-grep ^dgdba:     /etc/group || groupadd -g 54325 dgdba
-grep ^kmdba:     /etc/group || groupadd -g 54326 kmdba
-
-#create or modify as required user grid and oracle
-echo "verifying grid user"
-id grid   > /dev/null  && usermod -a -g oinstall -G asmdba,asmadmin,asmoper,dba grid                 || useradd -u 54320 -g oinstall -G asmdba,asmadmin,asmoper,dba grid
-echo "verifying oracle user"
-id oracle > /dev/null  && usermod -a -g oinstall -G dba,asmdba,backupdba,oper,dgdba,kmdba oracle || useradd -u 54321 -g oinstall -G dba,asmdba,backupdba,oper,dgdba,kmdba oracle
 
 #set initial password
 echo oracle | passwd --stdin oracle
@@ -82,6 +66,22 @@ chmod       ug+rw               /u01
 chmod -R    ug+rw               /u01/app
 
 sed -i -e 's/Defaults\s*requiretty$/#Defaults\trequiretty/' /etc/sudoers
+
+[ $1 ] && ARG=$1 || ARG="empty"
+
+if [ $ARG == "rac" ] ;then
+  rpm -q expect 2>&1 >> /dev/null || yum install -y expect
+  [ -f /media/stagefiles/os/99-oracle-asmdevices.rules ] && \cp /media/stagefiles/os/99-oracle-asmdevices.rules /etc/udev/rules.d/
+  start_udev
+  [ -f /media/stagefiles/db/zip/linuxamd64_12c_grid_1of2.zip ] && unzip -o /media/stagefiles/db/zip/linuxamd64_12c_grid_1of2.zip -d /u01/stage grid/rpm/cvuqdisk-1.0.9-1.rpm
+  [ -f /media/stagefiles/db/zip/linuxamd64_12c_grid_1of2.zip ] && unzip -o /media/stagefiles/db/zip/linuxamd64_12c_grid_1of2.zip -d /u01/stage grid/sshsetup/sshUserSetup.sh
+  yum install -y /u01/stage/grid/rpm/cvuqdisk-1.0.9-1.rpm
+  RP_ETH2="net.ipv4.conf.eth2.rp_filter=2"
+  RP_ETH3="net.ipv4.conf.eth3.rp_filter=2"
+  grep $RP_ETH2 /etc/sysctl.conf 2>/dev/null || echo $RP_ETH2 >> /etc/sysctl.conf
+  grep $RP_ETH3 /etc/sysctl.conf 2>/dev/null || echo $RP_ETH3 >> /etc/sysctl.conf
+  sysctl -p
+fi
 
 #hostname need to be on /etc/hosts
 

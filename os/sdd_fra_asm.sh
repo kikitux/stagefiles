@@ -1,10 +1,22 @@
-#install required packages
-yum install -y oracleasm-support.x86_64 parted.x86_64
+#!/bin/bash
+
+THISFILE=$(basename "${0}")
+THISDIR=${0%$THISFILE}
+BASEDIR=${0%os/$THISFILE}
+
+id grid 2>&1 >/dev/null
+if [ $? -ne 0 ]; then
+  echo "user grid is required"
+  echo "executing $BASEDIR/os/grid_oracle_user.sh"
+  sh  "$BASEDIR/os/grid_oracle_user.sh"
+fi
 
 #configure oracleasm
 if [ -d /dev/oracleasm/disks ]; then
   echo "oracleasm configured"
 else
+  #install required packages
+  yum install -y oracleasm-support.x86_64 parted.x86_64
   service oracleasm configure << EOF
   grid
   asmadmin
