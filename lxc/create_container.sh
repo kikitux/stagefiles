@@ -5,7 +5,7 @@ THISDIR=${0%$THISFILE}
 BASEDIR=${0%lxc/$THISFILE}
 
 
-. $BASEDIR/os/repo.env
+[ $REPO ] || . $BASEDIR/os/repo.env
 
 for x in $@; do
 

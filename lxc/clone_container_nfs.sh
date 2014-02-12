@@ -50,7 +50,7 @@ if [ -f /container/$CONTAINER2/config ]; then
     grep "u0$i/grid_disk" /container/$CONTAINER2/rootfs/etc/fstab
     if [ $? -ne 0 ];then
       echo "192.168.122.1:/u0$i/grid_disk /u0$i/grid_disk nfs rw,bg,hard,nointr,rsize=32768,wsize=32768,tcp,actimeo=0,vers=3,timeo=600 0 0" >> /container/$CONTAINER2/rootfs/etc/fstab
-      mkdir -p /container/$CONTAINER2/rootfs/u0$i/grid_disk
+      mkdir -p /container/$CONTAINER2/rootfs/u0$i/grid_disk /u0$i/grid_disk
     fi
   done
 fi
