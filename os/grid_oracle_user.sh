@@ -3,15 +3,15 @@
 #create the extra groups for db12c role separation
 echo "Checking groups for grid and oracle user"
 
-grep ^asmdba:    /etc/group || groupadd -g 54318 asmdba
-grep ^asmoper:   /etc/group || groupadd -g 54319 asmoper
-grep ^asmadmin:  /etc/group || groupadd -g 54320 asmadmin
-grep ^oinstall:  /etc/group || groupadd -g 54321 oinstall
-grep ^dba:       /etc/group || groupadd -g 54322 dba
-grep ^backupdba: /etc/group || groupadd -g 54323 backupdba
-grep ^oper:      /etc/group || groupadd -g 54324 oper
-grep ^dgdba:     /etc/group || groupadd -g 54325 dgdba
-grep ^kmdba:     /etc/group || groupadd -g 54326 kmdba
+grep ^asmdba:    /etc/group 2>&1 > /dev/null || groupadd -g 54318 asmdba
+grep ^asmoper:   /etc/group 2>&1 > /dev/null || groupadd -g 54319 asmoper
+grep ^asmadmin:  /etc/group 2>&1 > /dev/null || groupadd -g 54320 asmadmin
+grep ^oinstall:  /etc/group 2>&1 > /dev/null || groupadd -g 54321 oinstall
+grep ^dba:       /etc/group 2>&1 > /dev/null || groupadd -g 54322 dba
+grep ^backupdba: /etc/group 2>&1 > /dev/null || groupadd -g 54323 backupdba
+grep ^oper:      /etc/group 2>&1 > /dev/null || groupadd -g 54324 oper
+grep ^dgdba:     /etc/group 2>&1 > /dev/null || groupadd -g 54325 dgdba
+grep ^kmdba:     /etc/group 2>&1 > /dev/null || groupadd -g 54326 kmdba
 
 #create or modify as required user grid and oracle
 echo "verifying grid user"
