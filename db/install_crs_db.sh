@@ -239,8 +239,8 @@ GI_HOME=/u01/app/12.1.0.1/grid
 ORACLE_BASE=/u01/app/oracle
 ORACLE_HOME=/u01/app/oracle/product/12.1.0.1/dbhome_1
 
-#Grid patch
-$ORACLE_HOME/OPatch/opatchauto apply /u01/stage/17735306/17735306 -oh $ORACLE_HOME -ocmrf /u01/stage/ocm.rsp
+#DB patch
+sudo -H -E -u oracle /u01/app/oracle/product/12.1.0.1/dbhome_1/OPatch/opatch apply /u01/stage/17735306/17735306/17552800 -silent -ocmrf /u01/stage/ocm.rsp
 
 
 }
