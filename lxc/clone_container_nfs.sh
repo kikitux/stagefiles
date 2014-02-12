@@ -39,8 +39,8 @@ lxc.mount.entry=/u01/$CONTAINER2 /container/$CONTAINER2/rootfs/u01 none rw,bind 
 lxc.mount.entry=$BASEDIR /container/$CONTAINER2/rootfs$BASEDIR none rw,bind 0 0
 EOF
 
-grep 'u02/grid_disk' /etc/exports || echo '/u02/grid_disk *(insecure,no_root_squash)' >> /etc/exports
-grep 'u03/grid_disk' /etc/exports || echo '/u03/grid_disk *(insecure,no_root_squash)' >> /etc/exports
+grep 'u02/grid_disk' /etc/exports || echo '/u02/grid_disk *(rw,insecure,no_root_squash)' >> /etc/exports
+grep 'u03/grid_disk' /etc/exports || echo '/u03/grid_disk *(rw,insecure,no_root_squash)' >> /etc/exports
 chkconfig nfs on
 service nfs restart
 
