@@ -44,3 +44,4 @@ else
 fi
 
 sysctl -w net.ipv4.ip_forward=1
+sed -i -e 's/net.ipv4.ip_forward\s=\s0$/net.ipv4.ip_forward = 1/' /etc/sysctl.conf

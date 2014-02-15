@@ -2,8 +2,8 @@ THISFILE=$(basename "${0}")
 THISDIR=${0%$THISFILE}
 BASEDIR=${0%poc/$THISFILE}
 
-export REPO=http://192.168.56.1
-export REPOFILE=http://192.168.56.1/stage/vbox-yum-ol6.repo
+export REPO=http://192.168.1.2/stage
+export REPOFILE=http://192.168.1.2/stage/vbox-yum-ol6.repo
 
 
 [ -d /container/base ] && echo "base container exists. reusing it" || sh $BASEDIR/step.sh sh $BASEDIR/lxc/create_container.sh base

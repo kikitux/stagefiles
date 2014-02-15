@@ -33,7 +33,7 @@ for x in $@ ; do
     echo 'DEVICE=eth1' 		>> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth1
     echo 'BOOTPROTO=dhcp' >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth1
     echo 'ONBOOT=yes' >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth1
-    echo "DHCP_HOSTNAME=$x\-priv1" >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth1
+    echo "DHCP_HOSTNAME=$x-priv1" >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth1
     echo 'NM_CONTROLLED=no' >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth1
     echo 'TYPE=Ethernet' >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth1
 
@@ -41,7 +41,7 @@ for x in $@ ; do
     echo 'DEVICE=eth2' 		>> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth2
     echo 'BOOTPROTO=dhcp' >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth2
     echo 'ONBOOT=yes' >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth2
-    echo "DHCP_HOSTNAME=$x\-priv2" >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth2
+    echo "DHCP_HOSTNAME=$x-priv2" >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth2
     echo 'NM_CONTROLLED=no' >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth2
     echo 'TYPE=Ethernet' >> /container/$x/rootfs/etc/sysconfig/network-scripts/ifcfg-eth2
 
