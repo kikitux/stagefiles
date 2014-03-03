@@ -1,0 +1,28 @@
+connect target /
+#catalog rman/rman@rman
+sql 'alter system archive log current' ;
+ list archivelog time between "sysdate-3" and "sysdate";
+run {
+ set nocfau;
+ configure device type disk parallelism 8 backup type to copy;
+ allocate channel ch1 device type disk format '/u02/bkp/&1/datafiles/%b';
+ allocate channel ch2 device type disk format '/u02/bkp/&1/datafiles/%b';
+ allocate channel ch3 device type disk format '/u02/bkp/&1/datafiles/%b';
+ allocate channel ch4 device type disk format '/u02/bkp/&1/datafiles/%b';
+ allocate channel ch5 device type disk format '/u02/bkp/&1/datafiles/%b';
+ allocate channel ch6 device type disk format '/u02/bkp/&1/datafiles/%b';
+ allocate channel ch7 device type disk format '/u02/bkp/&1/datafiles/%b';
+ allocate channel ch8 device type disk format '/u02/bkp/&1/datafiles/%b';
+ crosscheck copy;
+ delete noprompt expired copy;
+ recover copy of database with tag 'incr_update' until time 'SYSDATE-3';
+ crosscheck backup;
+ delete noprompt expired backup;
+ backup incremental level 1 
+ for recover of copy with tag 'incr_update' database reuse
+ format '/u02/bkp/&1/backupset/bkp_%U';
+ DELETE NOPROMPT BACKUP of database TAG='incr_update' COMPLETED BEFORE 'SYSDATE-3';
+ DELETE NOPROMPT BACKUP of archivelog all COMPLETED BEFORE 'SYSDATE-3';
+ DELETE NOPROMPT COPY of controlfile TAG='incr_update' COMPLETED BEFORE 'SYSDATE-3';
+ backup as copy current controlfile format '/u02/bkp/&1/controlfile/CTL_%d_%U' tag 'incr_update';
+}

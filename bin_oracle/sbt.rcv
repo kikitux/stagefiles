@@ -1,0 +1,22 @@
+connect target /
+#catalog rman/rman@rman
+run{
+allocate channel ch0 type sbt parms='SBT_LIBRARY=oracle.disksbt,ENV=(BACKUP_DIR=/u02/sbt/&1)';
+allocate channel ch1 type sbt parms='SBT_LIBRARY=oracle.disksbt,ENV=(BACKUP_DIR=/u02/sbt/&1)';
+allocate channel ch2 type sbt parms='SBT_LIBRARY=oracle.disksbt,ENV=(BACKUP_DIR=/u02/sbt/&1)';
+crosscheck backup;
+crosscheck copy;
+BACKUP AS COMPRESSED BACKUPSET INCREMENTAL LEVEL &2 DATABASE;
+BACKUP CURRENT CONTROLFILE;
+BACKUP SPFILE;
+allocate channel ch2 type disk;
+delete noprompt obsolete ;
+delete noprompt expired copy;
+delete noprompt expired backup;
+DELETE NOPROMPT COPY of controlfile COMPLETED BEFORE 'SYSDATE-10';
+DELETE NOPROMPT BACKUP of archivelog all COMPLETED BEFORE 'SYSDATE-10';
+release channel ch0;
+release channel ch1;
+release channel ch2;
+}
+

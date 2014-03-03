@@ -1,0 +1,10 @@
+connect target /
+#catalog rman/rman@rman
+run{
+allocate channel ch0 type sbt parms='SBT_LIBRARY=oracle.disksbt,ENV=(BACKUP_DIR=/u02/sbt/&1)';
+allocate channel ch1 type sbt parms='SBT_LIBRARY=oracle.disksbt,ENV=(BACKUP_DIR=/u02/sbt/&1)';
+BACKUP BACKUPSET from tag="archivelog" delete input;
+release channel ch0;
+release channel ch1;
+}
+

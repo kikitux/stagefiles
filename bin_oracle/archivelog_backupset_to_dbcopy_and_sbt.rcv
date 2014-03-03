@@ -1,0 +1,15 @@
+connect target /
+#catalog rman/rman@rman
+run{
+allocate channel ch2 type disk;
+crosscheck backup of archivelog all;
+backup backupset from tag="archivelog" tag="archivelog_dbcopy" format="/u02/dbcopy/&1/archivelog/%U";
+release channel ch2;
+allocate channel ch0 type sbt parms='SBT_LIBRARY=oracle.disksbt,ENV=(BACKUP_DIR=/u02/sbt/&1)';
+allocate channel ch1 type sbt parms='SBT_LIBRARY=oracle.disksbt,ENV=(BACKUP_DIR=/u02/sbt/&1)';
+BACKUP BACKUPSET from tag="archivelog" delete input;
+delete archivelog all backed up 1 times to sbt;
+release channel ch0;
+release channel ch1;
+}
+

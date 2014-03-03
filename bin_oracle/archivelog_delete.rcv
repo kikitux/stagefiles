@@ -1,0 +1,5 @@
+connect target /
+#catalog rman/rman@rman
+run{
+delete noprompt archivelog all ;
+}
