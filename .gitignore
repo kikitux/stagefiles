@@ -1,3 +1,4 @@
 *.zip
 *.log
 *.err
+.DS_Store

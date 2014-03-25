@@ -50,7 +50,7 @@ if [ -d $THISDIR/zip ]; then
       unzip -d em -o $x >> /dev/null
     done
   fi
-  [ -f /u01/stage/11.2.0.3_Database_Template_for_EM12_1_0_3_Linux_x64.zip ] || \cp $THISDIR/zip/11.2.0.3_Database_Template_for_EM12_1_0_3_Linux_x64.zip /u01/stage
+  [ -f /u01/stage/11.2.0.3_Database_Template_for_EM12_1_0_3_Linux_x64.zip ] || \cp $THISDIR/zip/11.2.0.3_Database_Template_for_EM12_1_0_3_Linux_x64.zip /u01/stage/em
   if [ -d /u01/stage/em/bishiphome/ ]; then
     echo "found bishiphome"
   else

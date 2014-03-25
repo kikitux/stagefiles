@@ -9,9 +9,11 @@ BASEDIR=${0%os/$THISFILE}
 
 if [ ! $1 ]; then
   #setup local yum repo
-  [ -f /etc/yum.repos.d/public-yum-ol6.repo ] && mv /etc/yum.repos.d/public-yum-ol6.repo{,.ori}
+  [ -f /etc/yum.repos.d/public-yum-ol6.repo ] && ( mv /etc/yum.repos.d/public-yum-ol6.repo{,.ori} ; touch /etc/yum.repos.d/public-yum-ol6.repo )
   [ -f /etc/yum.repos.d/local.repo ] && echo "local.repo found, skipping the download"
-  [ -f /etc/yum.repos.d/local.repo ] || curl -o /etc/yum.repos.d/local.repo $REPOFILE
+  if [ ! -f /etc/yum.repos.d/local.repo ]; then
+    [[ $REPO =~ http* ]] && curl -o /etc/yum.repos.d/local.repo $REPOFILE || \cp $REPOFILE /etc/yum.repos.d/local.repo
+  fi
   yum clean all
 else
   [ -f /etc/yum.repos.d/local.repo ] && \rm /etc/yum.repos.d/local.repo
