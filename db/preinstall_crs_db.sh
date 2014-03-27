@@ -4,11 +4,7 @@
 #install preinstall rpm for oracle 12c db
 
 echo "installing oracle-rdbms-server-12cR1-preinstall"
-if [ -c /dev/lxc/console ]; then
-  PACKAGES="oracle-rdbms-server-12cR1-preinstall perl unzip sudo"
-else
-  PACKAGES="oracle-rdbms-server-12cR1-preinstall perl yum-plugin-fs-snapshot ocfs2-tools reflink btrfs-progs parted oracleasm-support unzip sudo glibc-devel.i686"
-fi
+PACKAGES="oracle-rdbms-server-12cR1-preinstall perl unzip sudo glibc-devel.i686"
 
 rpm -q $PACKAGES
 if [ $? -ne 0 ]; then
