@@ -9,7 +9,7 @@ fi
 blkid /dev/sdd*
 if [ $? -ne 0 ]; then
   mkfs.ocfs2 -M local -T mail /dev/sdd
-  blkid /dev/sdd 2>&1>/dev/null && echo $(blkid /dev/sdd -o export | head -n1) /u03 ocfs2 defaults 0 0 >> /etc/fstab
+  blkid /dev/sdd 2>&1>/dev/null && echo $(blkid /dev/sdd -o export | grep '^UUID=') /u03 ocfs2 defaults 0 0 >> /etc/fstab
   mkdir -p /u03
   mount /u03
 else
